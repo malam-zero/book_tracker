@@ -1,4 +1,3 @@
-import 'package:book_tracker/network/network.dart';
 import 'package:book_tracker/pages/favourites_screen.dart';
 import 'package:book_tracker/pages/home_screen.dart';
 import 'package:book_tracker/pages/saved_screen.dart';
@@ -18,19 +17,6 @@ class _MyHomePageState extends State<MyHomePage> {
     SavedScreen(),
     FavouritesScreen(),
   ];
-  Network network = Network();
-
-  // Future<void> _serachBooks(String query) async {
-  //   try {
-  //     List<Book> books = await network.searchBooks(query);
-  //   } catch (e) {}
-  // }
-
-  @override
-  void initState() {
-    // _serachBooks("android");
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
