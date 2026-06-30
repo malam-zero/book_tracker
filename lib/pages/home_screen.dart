@@ -1,5 +1,6 @@
 import 'package:book_tracker/models/book_model.dart';
 import 'package:book_tracker/network/network.dart';
+import 'package:book_tracker/widgets/grid_view_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -47,18 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 onSubmitted: (query) => _searchBooks(query),
               ),
             ),
-            Expanded(
-              child: SizedBox(
-                width: double.infinity,
-                child: ListView.builder(
-                  itemCount: _books.length,
-                  itemBuilder: (context, index) {
-                    Book book = _books[index];
-                    return ListTile(title: Text(book.title));
-                  },
-                ),
-              ),
-            ),
+            GridViewWidget(books: _books),
           ],
         ),
       ),
