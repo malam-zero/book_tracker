@@ -22,12 +22,12 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        // backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text("Qari"),
       ),
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme.of(context).colorScheme.primary,
         currentIndex: _currentIndex,
         items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
@@ -37,8 +37,8 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Favourites',
           ),
         ],
-        selectedItemColor: Theme.of(context).colorScheme.onPrimary,
-        unselectedItemColor: Theme.of(context).colorScheme.inverseSurface,
+        selectedItemColor: Colors.white,
+        unselectedItemColor: Colors.white70,
         onTap: (value) {
           setState(() {
             _currentIndex = value;
