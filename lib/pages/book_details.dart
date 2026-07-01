@@ -57,18 +57,19 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                     child: !isFromSavedScreen
                         ? ElevatedButton(
                             onPressed: () async {
-                              // save a book to the datase
                               try {
-                                int savedInt = await DatabaseHelper.instance
-                                    .insert(book);
-                                SnackBar snackBar = const SnackBar(
-                                  content: Text("Book Saved"),
-                                );
-                                ScaffoldMessenger.of(
-                                  context,
-                                ).showSnackBar(snackBar);
+                                await DatabaseHelper.instance.insert(book);
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(content: Text("Book Saved")),
+                                  );
+                                }
                               } catch (e) {
-                                print("Error: $e");
+                                if (context.mounted) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(content: Text("Error saving book: $e")),
+                                  );
+                                }
                               }
                             },
                             child: const Text('Save'),
