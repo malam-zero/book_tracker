@@ -11,11 +11,25 @@ class SavedScreen extends StatefulWidget {
 }
 
 class _SavedScreenState extends State<SavedScreen> {
+  late Future<List<Book>> _booksFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _booksFuture = DatabaseHelper.instance.readAllBooks();
+  }
+
+  void _refreshBooks() {
+    setState(() {
+      _booksFuture = DatabaseHelper.instance.readAllBooks();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: FutureBuilder(
-        future: DatabaseHelper.instance.readAllBooks(),
+        future: _booksFuture,
         builder: (context, snapshot) => snapshot.hasData
             ? ListView.builder(
                 itemCount: snapshot.data!.length,
@@ -40,14 +54,16 @@ class _SavedScreenState extends State<SavedScreen> {
                         title: Text(book.title),
                         trailing: IconButton(
                           icon: const Icon(Icons.delete),
-                          onPressed: () {
-                            DatabaseHelper.instance.deleteBook(book.id);
-                            setState(() {});
+                          onPressed: () async {
+                            await DatabaseHelper.instance.deleteBook(book.id);
+                            _refreshBooks();
                           },
                         ),
                         leading: Image.network(
                           book.imageLinks['thumbnail'] ?? '',
                           fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.book),
                         ),
                         subtitle: Column(
                           children: [
@@ -62,7 +78,7 @@ class _SavedScreenState extends State<SavedScreen> {
                                       book.isFavorite,
                                     );
                                 //refresh th UI
-                                setState(() {});
+                                _refreshBooks();
                               },
                               icon: Icon(
                                 book.isFavorite

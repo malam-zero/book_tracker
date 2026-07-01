@@ -80,29 +80,48 @@ class Book {
 
   // for loading from db
   factory Book.fromJsonDatabase(Map<String, dynamic> jsonObject) {
-    return Book(
-      id: jsonObject['id'] as String,
-      title: jsonObject['title'] as String,
-      authors: jsonObject['authors'] is String
-          ? (json.decode(jsonObject['authors']) as List)
-                .map((e) => e as String)
-                .toList()
-          : [],
-      publisher: jsonObject['publisher'] as String,
-      publishedDate: jsonObject['publishedDate'] as String,
-      description: jsonObject['description'] as String,
-      industryIdentifiers: jsonObject['industryIdentifiers'] is String
-          ? Map.from(json.decode(jsonObject['industryIdentifiers']))
-          : {},
-      pageCount: jsonObject['pageCount'] as int,
-      language: jsonObject['language'] as String,
-      imageLinks: jsonObject['imageLinks'] is String
-          ? Map.from(json.decode(jsonObject['imageLinks']))
-          : {},
-      isFavorite: (jsonObject['favorite'] as int) == 1,
-      previewLink: jsonObject['previewLink'] as String,
-      infoLink: jsonObject['infoLink'] as String,
-    );
+    try {
+      return Book(
+        id: jsonObject['id'] as String,
+        title: jsonObject['title'] as String,
+        authors: jsonObject['authors'] is String
+            ? (json.decode(jsonObject['authors']) as List)
+                  .map((e) => e as String)
+                  .toList()
+            : [],
+        publisher: jsonObject['publisher'] as String,
+        publishedDate: jsonObject['publishedDate'] as String,
+        description: jsonObject['description'] as String,
+        industryIdentifiers: jsonObject['industryIdentifiers'] is String
+            ? Map.from(json.decode(jsonObject['industryIdentifiers']))
+            : {},
+        pageCount: jsonObject['pageCount'] as int,
+        language: jsonObject['language'] as String,
+        imageLinks: jsonObject['imageLinks'] is String
+            ? Map.from(json.decode(jsonObject['imageLinks']))
+            : {},
+        isFavorite: (jsonObject['favorite'] as int) == 1,
+        previewLink: jsonObject['previewLink'] as String,
+        infoLink: jsonObject['infoLink'] as String,
+      );
+    } catch (e) {
+      // Return a fallback book object if decoding fails to prevent app crash
+      return Book(
+        id: jsonObject['id'] as String? ?? '',
+        title: 'Error loading book',
+        authors: [],
+        publisher: '',
+        publishedDate: '',
+        description:
+            'An error occurred while loading this book from the database.',
+        industryIdentifiers: {},
+        pageCount: 0,
+        language: '',
+        imageLinks: {},
+        previewLink: '',
+        infoLink: '',
+      );
+    }
   }
 
   @override
