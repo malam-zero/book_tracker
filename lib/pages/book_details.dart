@@ -20,6 +20,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
 
     final theme = Theme.of(context).textTheme;
 
+    late Future<List<Book>> booksFuture;
+    void refreshBooks() {
+      setState(() {
+        booksFuture = DatabaseHelper.instance.readAllBooks();
+      });
+    }
+
     return Scaffold(
       appBar: AppBar(title: Text(book.title)),
       body: SingleChildScrollView(
@@ -68,7 +75,13 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                           )
                         : ElevatedButton.icon(
                             onPressed: () async {
-                             
+                              book.isFavorite = !book.isFavorite;
+                              await DatabaseHelper.instance
+                                  .toggleFavoriteStatus(
+                                    book.id,
+                                    book.isFavorite,
+                                  );
+                              refreshBooks();
                             },
                             icon: const Icon(Icons.favorite),
                             label: const Text('Favorite'),

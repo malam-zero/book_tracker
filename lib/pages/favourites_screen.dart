@@ -33,20 +33,67 @@ class _FavouritesScreenState extends State<FavouritesScreen> {
             List<Book> favBooks = snapshot.data!;
 
             return ListView.builder(
+              padding: const EdgeInsets.all(16),
               itemCount: favBooks.length,
               itemBuilder: (context, index) {
                 Book book = favBooks[index];
-                return Card(
-                  child: ListTile(
-                    leading: Image.network(
-                      book.imageLinks['thumbnail'] ?? '',
-                      fit: BoxFit.cover,
-                      errorBuilder: (context, error, stackTrace) =>
-                          const Icon(Icons.book),
+                return TweenAnimationBuilder(
+                  duration: Duration(milliseconds: 400 + (index * 100)),
+                  tween: Tween<double>(begin: 0, end: 1),
+                  builder: (context, double value, child) {
+                    return Opacity(
+                      opacity: value,
+                      child: Transform.translate(
+                        offset: Offset(0, 20 * (1 - value)),
+                        child: child,
+                      ),
+                    );
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.05),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
-                    title: Text(book.title),
-                    subtitle: Text(book.authors.join(', ')),
-                    trailing: const Icon(Icons.favorite, color: Colors.red),
+                    child: ListTile(
+                      contentPadding: const EdgeInsets.all(12),
+                      leading: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          book.imageLinks['thumbnail'] ?? '',
+                          fit: BoxFit.cover,
+                          width: 50,
+                          height: 75,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.book, size: 50),
+                        ),
+                      ),
+                      title: Text(
+                        book.title,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      subtitle: Text(
+                        book.authors.join(', '),
+                        style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                      ),
+                      trailing: const Icon(
+                        Icons.favorite,
+                        color: Colors.red,
+                        size: 28,
+                      ),
+                    ),
                   ),
                 );
               },
