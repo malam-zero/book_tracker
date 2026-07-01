@@ -1,3 +1,4 @@
+import 'package:book_tracker/db/database_helper.dart';
 import 'package:book_tracker/models/book_model.dart';
 import 'package:book_tracker/utils/book_details_argument.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Image.network(
-                    book.imageLinks['thumbnail'] ??
-                        'https://via.placeholder.com/150',
+                    book.imageLinks['thumbnail'] ?? '',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -51,23 +51,25 @@ class _BookDetailsScreenState extends State<BookDetailsScreen> {
                         ? ElevatedButton(
                             onPressed: () async {
                               // save a book to the datase
-                              // try {
-                              //   int savedInt = await DatabaseHelper.instance
-                              //       .insert(book);
-                              //   SnackBar snackBar = const SnackBar(
-                              //     content: Text("Book Saved"),
-                              //   );
-                              //   ScaffoldMessenger.of(
-                              //     context,
-                              //   ).showSnackBar(snackBar);
-                              // } catch (e) {
-                              //   print("Error: $e");
-                              // }
+                              try {
+                                int savedInt = await DatabaseHelper.instance
+                                    .insert(book);
+                                SnackBar snackBar = const SnackBar(
+                                  content: Text("Book Saved"),
+                                );
+                                ScaffoldMessenger.of(
+                                  context,
+                                ).showSnackBar(snackBar);
+                              } catch (e) {
+                                print("Error: $e");
+                              }
                             },
                             child: const Text('Save'),
                           )
                         : ElevatedButton.icon(
-                            onPressed: () async {},
+                            onPressed: () async {
+                             
+                            },
                             icon: const Icon(Icons.favorite),
                             label: const Text('Favorite'),
                           ),
